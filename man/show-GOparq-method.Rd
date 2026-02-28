@@ -6,6 +6,9 @@
 \usage{
 \S4method{show}{GOparq}(object)
 }
+\arguments{
+\item{object}{instance of GOparq}
+}
 \description{
 display for parquet representation of GO
 }

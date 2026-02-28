@@ -1,8 +1,12 @@
 #' class for parquet representation of GO
+#' @note This class just serves as a bridge to parquet files that emulate
+#' the former SQLite schema of AnnotationDbi-based GO.db.
+#' @import methods
 #' @export
 setClass("GOparq", representation(conn="ANY"))
 
 #' display for parquet representation of GO
+#' @param object instance of GOparq
 #' @export
 setMethod("show", "GOparq", function(object) {
   cat(sprintf("GO.db analog for Bioconductor %s\n", as.character(BiocManager::version())))
@@ -20,10 +24,13 @@ GO.db = function() {
 
 #' emulate AnnotationDbi
 #' @importFrom AnnotationDbi select
+#' @rawNamespace import(dplyr, except=select)
+#' @import arrow
 #' @param x instance of GOparq
 #' @param keys for filtering, if NULL, no filtering performed
 #' @param columns for joining and selecting
 #' @param keytype for table selection: one of "term", "goid"; all caps may be used
+#' @param \dots not used
 #' @return data.frame
 #' @examples
 #' GO <- GO.db()

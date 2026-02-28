@@ -5,6 +5,7 @@
 #' @param keys for filtering, if NULL, no filtering performed
 #' @param columns for joining and selecting
 #' @param keytype for table selection: one of "term", "goid"; all caps may be used
+#' @param \dots not used
 #' @return data.frame
 #' @note GO.db permitted columns and keytypes "DEFINITION", "GOID", "ONTOLOGY", "TERM"
 #' @examples

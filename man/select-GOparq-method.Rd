@@ -14,6 +14,8 @@
 \item{columns}{for joining and selecting}
 
 \item{keytype}{for table selection: one of "term", "goid"; all caps may be used}
+
+\item{\dots}{not used}
 }
 \value{
 data.frame

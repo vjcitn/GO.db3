@@ -7,3 +7,7 @@
 \description{
 class for parquet representation of GO
 }
+\note{
+This class just serves as a bridge to parquet files that emulate
+the former SQLite schema of AnnotationDbi-based GO.db.
+}

@@ -1,0 +1,32 @@
+---
+title: "GO.db3: parquet-based AnnotationDbi emulation of GO.db for Gene Ontology"
+shorttitle: "Modernizing GO.db in Bioconductor"
+author: "Vincent J. Carey, stvjc at channing.harvard.edu"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{GO.db3: parquet-based AnnotationDbi emulation of GO.db for Gene Ontology}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: united
+    toc: yes
+---
+
+# Introduction
+
+This package aims to replace GO.db.  The AnnotationPipeline system in which
+GO.db is constructed has become stale.
+
+# Demonstration
+
+```{r lk}
+library(GO.db3)
+GO <- GO.db()  # emulate old behavior a bit
+GO
+select(GO, keys=c("GO:0009435", "GO:0009436"), keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
+```
+
+The mapIds method needs to be implemented.
