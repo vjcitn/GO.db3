@@ -22,11 +22,10 @@ GO.db is constructed has become stale.
 
 # Demonstration
 
-```{r lk}
+```{r lk,message=FALSE}
 library(GO.db3)
-GO <- GO.db()  # emulate old behavior a bit
-GO
-select(GO, keys=c("GO:0009435", "GO:0009436"), keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
+GO.db
+select(GO.db, keys=c("GO:0009435", "GO:0009436"), keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
 ```
 
 The mapIds method needs to be implemented.

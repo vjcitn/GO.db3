@@ -24,9 +24,8 @@ data.frame
 emulate AnnotationDbi
 }
 \examples{
-GO <- GO.db()
-select(GO, keys="low-affinity zinc ion transmembrane transporter activity", keytype="term",
+select(GO.db, keys="low-affinity zinc ion transmembrane transporter activity", keytype="term",
     columns=c("GOID", "DEFINITION"))
-select(GO, keys="GO:0009435", keytype="GOID", columns="TERM")
-select(GO, keys="GO:0009435", keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
+select(GO.db, keys="GO:0009435", keytype="GOID", columns="TERM")
+select(GO.db, keys="GO:0009435", keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
 }

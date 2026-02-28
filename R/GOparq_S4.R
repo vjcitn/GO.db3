@@ -14,9 +14,8 @@ setMethod("show", "GOparq", function(object) {
   cat("use select, mapIds, etc. ...\n")
 })
 
-#' connector
-#' @export
-GO.db = function() {
+#' connector, called in .onLoad
+.GO.db = function() {
     allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
     termref = arrow::open_dataset(grep("_term", allcon$files, value=TRUE))
     new("GOparq", conn=list(allcon=allcon, termref=termref))
@@ -33,11 +32,10 @@ GO.db = function() {
 #' @param \dots not used
 #' @return data.frame
 #' @examples
-#' GO <- GO.db()
-#' select(GO, keys="low-affinity zinc ion transmembrane transporter activity", keytype="term",
+#' select(GO.db, keys="low-affinity zinc ion transmembrane transporter activity", keytype="term",
 #'     columns=c("GOID", "DEFINITION"))
-#' select(GO, keys="GO:0009435", keytype="GOID", columns="TERM")
-#' select(GO, keys="GO:0009435", keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
+#' select(GO.db, keys="GO:0009435", keytype="GOID", columns="TERM")
+#' select(GO.db, keys="GO:0009435", keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
 #' @export
 setMethod("select", "GOparq", function(x, keys, columns, keytype, ...) {
 # backwards compatibility of missing keytype
