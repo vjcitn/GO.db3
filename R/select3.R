@@ -1,6 +1,6 @@
 #' superficial emulator of AnnotationDbi::select for Gene Ontology
 #' @import arrow
-#' @import dplyr
+#' @rawNamespace import(dplyr, except=select)
 #' @param x character, must be "GO.db3"
 #' @param keys for filtering, if NULL, no filtering performed
 #' @param columns for joining and selecting
