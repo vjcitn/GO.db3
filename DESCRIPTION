@@ -1,6 +1,6 @@
 Package: GO.db3
 Title: Gene Ontology interface based on parquet+arrow+dplyr, emulating some of AnnotationDbi
-Version: 0.0.2
+Version: 0.0.3
 Authors@R:
     person(given = "Vince",
            family = "Carey",
@@ -11,7 +11,7 @@ Description: This package defines Bioconductor-oriented
 	Gene Ontology interfaces based on parquet+arrow+dplyr, emulating some of 
 	the functionality of the AnnotationDbi-based GO.db.
 Depends: R (>= 4.2.0)
-Imports: methods, AnnotationDbi, BiocManager, dplyr, arrow
+Imports: methods, AnnotationDbi, BiocManager, dplyr, arrow, rlang
 Suggests: knitr, BiocStyle, testthat, rmarkdown
 License: Apache 2.0 + file LICENSE
 VignetteBuilder: knitr

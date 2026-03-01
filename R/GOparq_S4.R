@@ -22,7 +22,7 @@ setMethod("show", "GOparq", function(object) {
 }
 
 #' emulate AnnotationDbi
-#' @importFrom AnnotationDbi select
+#' @importFrom AnnotationDbi select keys columns
 #' @rawNamespace import(dplyr, except=select)
 #' @import arrow
 #' @param x instance of GOparq
@@ -76,4 +76,25 @@ setMethod("select", "GOparq", function(x, keys, columns, keytype, ...) {
         return(thetab[, columns])
     }
     as.data.frame(thetab)
+})
+
+
+
+#' list keys
+#' @importFrom rlang sym
+#' @param x instance of GOparq
+#' @param keytype character(1) one of "GOID", "TERM", "DEFINITION", "ONTOLOGY"
+#' @param \dots not used
+#' @examples
+#' head(keys(GO.db))
+#' @export
+setMethod("keys", "GOparq", function(x, keytype, ...) {
+    if (missing(keytype)) {
+     message("missing keytype is allowed for backwards compatibility; it will become a warning in bioc > 3.23")
+     keytype = "goid"
+     }
+     keytype = tolower(keytype)
+     kmap = c(goid="go_id", definition="definition", term="term", ontology="ontology") # cater for GOID in legacy
+     stopifnot(keytype %in% names(kmap))
+     return(slot(GO.db, "conn")$termref |> dplyr::select(rlang::sym(kmap[keytype])) |> dplyr::collect() |> unlist() |> unname())
 })
