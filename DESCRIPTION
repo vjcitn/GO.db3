@@ -1,6 +1,6 @@
 Package: GO.db3
 Title: Gene Ontology interface based on parquet+arrow+dplyr, emulating some of AnnotationDbi
-Version: 0.0.3
+Version: 0.0.4
 Authors@R:
     person(given = "Vince",
            family = "Carey",

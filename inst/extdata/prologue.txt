@@ -1,5 +1,5 @@
 format-version: 1.2
-data-version: releases/2026-01-23
+data-version: releases/2025-10-10
 subsetdef: chebi_ph7_3 "Rhea list of ChEBI terms representing the major species at pH 7.3."
 subsetdef: gocheck_do_not_annotate "Term not to be used for direct annotation"
 subsetdef: gocheck_obsoletion_candidate "Terms planned for obsoletion"
@@ -26,23 +26,13 @@ synonymtypedef: syngo_official_label "label approved by the SynGO project"
 synonymtypedef: systematic_synonym "Systematic synonym" EXACT
 default-namespace: gene_ontology
 idspace: dc http://purl.org/dc/elements/1.1/ 
-idspace: EC http://purl.uniprot.org/enzyme/ 
-idspace: KEGG_REACTION http://www.kegg.jp/entry/ 
-idspace: MetaCyc http://identifiers.org/metacyc.reaction/ 
 idspace: oboInOwl http://www.geneontology.org/formats/oboInOwl# 
-idspace: Reactome http://identifiers.org/reactome/ 
-idspace: RHEA http://rdf.rhea-db.org/ 
-idspace: skos http://www.w3.org/2004/02/skos/core# 
-idspace: TC http://identifiers.org/tcdb/ 
 idspace: terms http://purl.org/dc/terms/ 
-idspace: UM-BBD_pathwayID http://identifiers.org/umbbd.pathway/ 
-idspace: UM-BBD_reactionID http://identifiers.org/umbbd.reaction/ 
-idspace: VZ https://viralzone.expasy.org/ 
 ontology: go
 property_value: dc:description "The Gene Ontology (GO) provides a framework and set of concepts for describing the functions of gene products from all organisms." xsd:string
 property_value: dc:title "Gene Ontology" xsd:string
 property_value: has_ontology_root_term GO:0003674
 property_value: has_ontology_root_term GO:0005575
 property_value: has_ontology_root_term GO:0008150
-property_value: owl:versionInfo "2026-01-23" xsd:string
+property_value: owl:versionInfo "2025-10-10" xsd:string
 property_value: terms:license http://creativecommons.org/licenses/by/4.0/
