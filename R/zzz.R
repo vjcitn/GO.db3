@@ -85,7 +85,7 @@ GOBPPARENTS <- NULL
 #    
     ttype = toupper(type)
     CURRENT2 = sprintf("GO%sPARENTS", ttype)
-    CURRENTE2 = sprintf("GO%sPARENTS", ttype)
+    CURRENTE2 = sprintf("GO%sPARENTS_env", ttype)
   # start environment production
      assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
      nn = lapply(seq_len(length(nids)),
@@ -93,7 +93,6 @@ GOBPPARENTS <- NULL
   # Now create the active binding
      fl2[[type]] = local({
         currente2 <- CURRENTE2
-        print(currente2)
         function() {
         get(currente2, envir=ns)
         }})
