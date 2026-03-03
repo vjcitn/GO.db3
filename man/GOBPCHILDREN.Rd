@@ -13,4 +13,9 @@ GOBPCHILDREN
 \description{
 environment for GO CHILDREN BP
 }
+\note{
+Previous versions of GO.db used 'isa' to name elements
+of this environment instead of 'is_a' which is
+now used in go.obo, and here.
+}
 \keyword{datasets}
