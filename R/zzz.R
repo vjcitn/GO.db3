@@ -29,6 +29,31 @@ GOMFPARENTS <- NULL
 #' @export
 GOBPPARENTS <- NULL
 
+#' environment for GO CHILDREN CC
+#' @name GOCCCHILDREN
+#' @note Previous versions of GO.db used 'isa' to name elements
+#' of this environment instead of 'is_a' which is
+#' now used in go.obo, and here.
+#' @export
+GOCCCHILDREN <- NULL
+
+#' environment for GO CHILDREN MF
+#' @name GOMFCHILDREN
+#' @note Previous versions of GO.db used 'isa' to name elements
+#' of this environment instead of 'is_a' which is
+#' now used in go.obo, and here.
+#' @export
+GOMFCHILDREN <- NULL
+
+#' environment for GO CHILDREN BP
+#' @name GOBPCHILDREN
+#' @note Previous versions of GO.db used 'isa' to name elements
+#' of this environment instead of 'is_a' which is
+#' now used in go.obo, and here.
+#' @export
+GOBPCHILDREN <- NULL
+
+
 #' environment for GO SYNONYM
 #' @name GOSYNONYM
 #' @note The behavior is unlike that of GO.db::GOSYNONYM which gives
@@ -139,5 +164,35 @@ GOSYNONYM <- NULL
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2, ns)
+
+# DO CHILDREN env
+
+  fl2 = vector("list", 3)
+  names(fl2) = c("cc", "mf", "bp")
+  for (type in c("cc", "mf", "bp")) {
+    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+    tabref= arrow::open_dataset(grep(sprintf("go_%s_parents", type), allcon$files, value=TRUE))
+    thetab = tabref |> as.data.frame()
+    uu = split(thetab$go_id, thetab$parent_id)
+    rr = split(thetab$relationship_type, thetab$parent_id)
+    for (i in seq_len(length(rr))) names(uu[[i]]) = rr[[i]]
+    nids = names(rr)
+#
+    ttype = toupper(type)
+    CURRENT2 = sprintf("GO%sCHILDREN", ttype)
+    CURRENTE2 = sprintf("GO%sCHILDREN_env", ttype)
+  # start environment production
+     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
+     nn = lapply(seq_len(length(uu)),
+        function(i) assign(nids[i], uu[[i]], envir=get(CURRENTE2, envir=ns)))
+  # Now create the active binding
+     fl2[[type]] = local({
+        currente2 <- CURRENTE2
+        function() {
+        get(currente2, envir=ns)
+        }})
+     rm(list=CURRENT2, envir=ns)
+     makeActiveBinding(CURRENT2, fl2[[type]], ns)
+     }
 
 }

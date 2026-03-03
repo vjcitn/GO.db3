@@ -2,10 +2,13 @@
 
 export(GO.db)
 export(GOBPANCESTOR)
+export(GOBPCHILDREN)
 export(GOBPPARENTS)
 export(GOCCANCESTOR)
+export(GOCCCHILDREN)
 export(GOCCPARENTS)
 export(GOMFANCESTOR)
+export(GOMFCHILDREN)
 export(GOMFPARENTS)
 export(GOSYNONYM)
 export(report_goparq)
