@@ -68,6 +68,11 @@ GOMFOFFSPRING <- NULL
 #' @export
 GOBPOFFSPRING <- NULL
 
+#' environment for GO TERM
+#' @importClassesFrom AnnotationDbi GOTerms
+#' @name GOTERM
+#' @export
+GOTERM <- NULL
 
 
 #' environment for GO SYNONYM
@@ -80,6 +85,11 @@ GOBPOFFSPRING <- NULL
 #' # see  https://www.ebi.ac.uk/QuickGO/term/GO:0000215 for related information
 #' @export
 GOSYNONYM <- NULL
+
+
+#' environment for GOTERM
+#' @export
+GOTERM <- NULL
 
 .onLoad <- function(libname, pkgname) {
   ns <- getNamespace(pkgname)
@@ -240,4 +250,55 @@ GOSYNONYM <- NULL
      }
 
 # END OFFSPRING
+
+# DO TERM env
+    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+    tabref= arrow::open_dataset(grep("term", allcon$files, value=TRUE))
+    thetab = tabref |> as.data.frame()
+    nel = nrow(thetab)
+    ans = vector("list", nel)
+    ids = thetab[["go_id"]]
+    terms = thetab[["term"]]
+    onts = thetab[["ontology"]]
+    defs = thetab[["definition"]]
+    nids = thetab[["go_id"]]
+    names(ans) = nids
+    for (i in seq_len(nel)) 
+      ans[[i]] = new("GOTerms", GOID=ids[i],
+           Term=terms[i], Ontology=onts[i],
+           Definition=defs[i], Synonym=NA_character_,
+             Secondary=NA_character_)
+    CURRENT2 = "GOTERM"
+    CURRENTE2 = "GOTERM_env"
+  # start environment production
+     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
+     nn = lapply(seq_len(length(ans)),
+        function(i) assign(nids[i], ans[[i]], envir=get(CURRENTE2, envir=ns)))
+  # Now create the active binding
+     fl2[[type]] = local({
+        currente2 <- CURRENTE2
+        function() {
+        get(currente2, envir=ns)
+        }})
+     rm(list=CURRENT2, envir=ns)
+     makeActiveBinding(CURRENT2, fl2[[type]], ns)
+
+#> head(ter)
+## A tibble: 6 × 4
+#  go_id      term                                            ontology definition
+#  <chr>      <chr>                                           <chr>    <chr>     
+#1 GO:0000001 mitochondrion inheritance                       BP       The distr…
+#2 GO:0000006 high-affinity zinc transmembrane transporter a… MF       Enables t…
+#3 GO:0000007 low-affinity zinc ion transmembrane transporte… MF       Enables t…
+#4 GO:0000009 alpha-1,6-mannosyltransferase activity          MF       Catalysis…
+#5 GO:0000010 heptaprenyl diphosphate synthase activity       MF       Catalysis…
+#6 GO:0000011 vacuole inheritance                             BP       The distr…
+#> getClass("GOTerms")
+#Class "GOTerms" [package "AnnotationDbi"]
+#
+#Slots:
+#                                                                        
+#Name:        GOID       Term   Ontology Definition    Synonym  Secondary
+#Class:  character  character  character  character  character  character
+
 }
