@@ -1,0 +1,21 @@
+source("buildAncTab.R", echo=TRUE)
+dim(cctab)
+head(cctab)
+ss = split(cctab, cctab[,1])
+ss[[1]]
+ss[2]
+ss[3]
+GOBPANCESTOR
+library(GO.db)
+GOBPANCESTOR
+get("GO:0000015", GOBPANCESTOR)
+get("GO:0000015", GOCCANCESTOR)
+?GOCCANCESTOR
+source("buildAncTab.R", echo=TRUE)
+ss = split(cctab, cctab[,1])
+ss[1]
+get("GO:0000015", GOCCANCESTOR)
+dir()
+goccanc_323 = cctab
+save(goccanc_323, file="goccanc_323.rda")
+savehistory(file="prebp.hist.txt")

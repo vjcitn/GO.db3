@@ -5,12 +5,29 @@ GO.db <- NULL
 #' self-describing object for GO ANCESTOR CC
 #' @export
 GOCCANCESTOR <- NULL
+
 #' self-describing object for GO ANCESTOR MF
 #' @export
 GOMFANCESTOR <- NULL
+
 #' self-describing object for GO ANCESTOR BP
 #' @export
 GOBPANCESTOR <- NULL
+
+#' self-describing object for GO PARENTS CC
+#' @name GOCCPARENTS
+#' @export
+GOCCPARENTS <- NULL
+
+#' self-describing object for GO PARENTS MF
+#' @name GOMFPARENTS
+#' @export
+GOMFPARENTS <- NULL
+
+#' self-describing object for GO PARENTS BP
+#' @name GOBPPARENTS
+#' @export
+GOBPPARENTS <- NULL
 
 .onLoad <- function(libname, pkgname) {
   ns <- getNamespace(pkgname)
@@ -51,4 +68,38 @@ GOBPANCESTOR <- NULL
      rm(list=CURRENT, envir=ns)
      makeActiveBinding(CURRENT, fl[[type]], ns)
     }
+# end ANCESTOR environments
+
+# begin PARENTS environments
+  fl2 = vector("list", 3)
+  names(fl2) = c("cc", "mf", "bp")
+  for (type in c("cc", "mf", "bp")) {
+    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+    tabref= arrow::open_dataset(grep(sprintf("go_%s_parents", type), allcon$files, value=TRUE))
+    thetab = tabref |> as.data.frame()
+    pars = thetab$parent_id
+    names(pars) = thetab$relationship_type
+    ids = thetab$go_id
+    spar = split(pars, ids)
+    nids = names(spar)
+#    
+    ttype = toupper(type)
+    CURRENT2 = sprintf("GO%sPARENTS", ttype)
+    CURRENTE2 = sprintf("GO%sPARENTS", ttype)
+  # start environment production
+     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
+     nn = lapply(seq_len(length(nids)),
+        function(i) assign(nids[i], spar[[i]], envir=get(CURRENTE2, envir=ns)))
+  # Now create the active binding
+     fl2[[type]] = local({
+        currente2 <- CURRENTE2
+        print(currente2)
+        function() {
+        get(currente2, envir=ns)
+        }})
+     rm(list=CURRENT2, envir=ns)
+     makeActiveBinding(CURRENT2, fl2[[type]], ns)
+    }
+## end PARENTS environments
+
 }

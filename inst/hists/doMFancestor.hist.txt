@@ -1,0 +1,38 @@
+library(GO.db3)
+GO.db@conn$files
+GO.db@conn
+GO.db@conn$allcon$files
+library(arrow); mfp = read_parquet("/Users/vincentcarey/Library/R/arm64/4.5/library/GO.db3/extdata/go323/go_mf_parents.parquet")
+library(dplyr)
+mfp |> head() |> collect()
+mfph = filter(mfp, relationship_type=="is_a")
+mfp |> count()
+mfph |> count()
+mfph |> as.data.frame() |> mutate(id=go_id, parent=parent_id) -> litd
+head(litd)
+dir()
+source("find_ancestors.R")
+source("find_ancestors.R")
+ff = find_ancestors(litd)
+ff = find_all_ancestors(litd)
+dim(ff)
+head(ff)
+library(GO.db)
+GO.dbMFANCESTORS
+ls(2)
+GO.dbMFANCESTOR
+GO.dbGOMFANCESTOR
+GOMFANCESTOR
+GOMFANCESTOR |> toTable() |> head()
+GOMFANCESTOR |> toTable() |> nrow()
+GOMFANCESTOR |> toTable() -> oldanc
+sold = split(oldanc[,2], oldanc[,1])
+sold[[1]]
+snew = split(ff[,2], ff[,1])
+sold[1]
+snew[1]
+snew[2]
+sold[2]
+ff[1:10,]
+get("GO:0000006", GOMFANCESTOR)
+savehistory(file="doMFancestor.hist.txt")
