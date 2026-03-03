@@ -3,7 +3,7 @@
 \docType{data}
 \name{GOCCANCESTOR}
 \alias{GOCCANCESTOR}
-\title{self-describing object for GO ANCESTOR CC}
+\title{environment for GO ANCESTOR CC}
 \format{
 An object of class \code{environment} of length 4068.
 }
@@ -11,6 +11,6 @@ An object of class \code{environment} of length 4068.
 GOCCANCESTOR
 }
 \description{
-self-describing object for GO ANCESTOR CC
+environment for GO ANCESTOR CC
 }
 \keyword{datasets}

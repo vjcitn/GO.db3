@@ -3,7 +3,7 @@
 \docType{data}
 \name{GOMFPARENTS}
 \alias{GOMFPARENTS}
-\title{self-describing object for GO PARENTS MF}
+\title{environment for GO PARENTS MF}
 \format{
 An object of class \code{environment} of length 10142.
 }
@@ -11,6 +11,6 @@ An object of class \code{environment} of length 10142.
 GOMFPARENTS
 }
 \description{
-self-describing object for GO PARENTS MF
+environment for GO PARENTS MF
 }
 \keyword{datasets}

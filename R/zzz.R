@@ -2,32 +2,43 @@
 #' @export
 GO.db <- NULL
 
-#' self-describing object for GO ANCESTOR CC
+#' environment for GO ANCESTOR CC
 #' @export
 GOCCANCESTOR <- NULL
 
-#' self-describing object for GO ANCESTOR MF
+#' environment for GO ANCESTOR MF
 #' @export
 GOMFANCESTOR <- NULL
 
-#' self-describing object for GO ANCESTOR BP
+#' environment for GO ANCESTOR BP
 #' @export
 GOBPANCESTOR <- NULL
 
-#' self-describing object for GO PARENTS CC
+#' environment for GO PARENTS CC
 #' @name GOCCPARENTS
 #' @export
 GOCCPARENTS <- NULL
 
-#' self-describing object for GO PARENTS MF
+#' environment for GO PARENTS MF
 #' @name GOMFPARENTS
 #' @export
 GOMFPARENTS <- NULL
 
-#' self-describing object for GO PARENTS BP
+#' environment for GO PARENTS BP
 #' @name GOBPPARENTS
 #' @export
 GOBPPARENTS <- NULL
+
+#' environment for GO SYNONYM
+#' @name GOSYNONYM
+#' @note The behavior is unlike that of GO.db::GOSYNONYM which gives
+#' stanzas from OBO.  Synonymous phrases are returned along with ids
+#' of secondary GO terms.
+#' @examples
+#' get("GO:0000215", GO.db3::GOSYNONYM)
+#' # see  https://www.ebi.ac.uk/QuickGO/term/GO:0000215 for related information
+#' @export
+GOSYNONYM <- NULL
 
 .onLoad <- function(libname, pkgname) {
   ns <- getNamespace(pkgname)
@@ -100,5 +111,33 @@ GOBPPARENTS <- NULL
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
     }
 ## end PARENTS environments
+
+## do SYNONYM env
+
+    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+    tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
+    thetab = tabref |> as.data.frame()
+  
+    syns = thetab$synonym
+    names(syns) = thetab$scope
+    ids = thetab$go_id
+    ssyn = split(syns, ids)
+    nids = names(ssyn)
+
+    CURRENT2 = "GOSYNONYM"
+    CURRENTE2 ="GOSYNONYM_env"
+  # start environment production
+    assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
+
+    for (i in seq_len(length(nids))) assign(nids[i], ssyn[[i]], envir=get(CURRENTE2, envir=ns))
+
+  # Now create the active binding
+     fl2 = local({
+        currente2 <- CURRENTE2
+        function() {
+        get(currente2, envir=ns)
+        }})
+     rm(list=CURRENT2, envir=ns)
+     makeActiveBinding(CURRENT2, fl2, ns)
 
 }
