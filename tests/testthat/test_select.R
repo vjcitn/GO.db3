@@ -15,4 +15,3 @@ test_that("select works", {
    expect_message(select(GO.db, keys="GO:0009435", columns=c("TERM", "ONTOLOGY"))) # no keytype given
    expect_error(select(GO.db, keys="GO:0009435", keytype="GOID"))
 })
-  
