@@ -161,23 +161,41 @@ GOTERM <- NULL
     }
 ## end PARENTS environments
 
+## Note: the production of thousands of GOTerms objects might
+## slow down package installation.  The ans list could be serialized
+## as it was for the synonyms resource.
+
 # DO TERM env
+
     allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
-    tabref= arrow::open_dataset(grep("term", allcon$files, value=TRUE))
-    thetab = tabref |> as.data.frame()
-    nel = nrow(thetab)
+#    tabref= arrow::open_dataset(grep("term", allcon$files, value=TRUE))
+#    thetab = tabref |> as.data.frame()
+
+    thetab = read_parquet(grep("term", allcon$files, value=TRUE)) |> as.data.frame()
+    syntab = read_parquet(grep("synonym", allcon$files, value=TRUE)) |> as.data.frame()
+    thetab = dplyr::left_join(thetab, syntab, by="go_id")
+
+    spltab = split(thetab, thetab$go_id)
+    nel = length(spltab)
+    nids = names(spltab)
     ans = vector("list", nel)
-    ids = thetab[["go_id"]]
-    terms = thetab[["term"]]
-    onts = thetab[["ontology"]]
-    defs = thetab[["definition"]]
-    nids = thetab[["go_id"]]
-    names(ans) = nids
-    for (i in seq_len(nel))    # THIS ANS WILL BE USED FOR SYNONYMS
-      ans[[i]] = new("GOTerms", GOID=ids[i],
-           Term=terms[i], Ontology=onts[i],
-           Definition=defs[i], Synonym=NA_character_,
-             Secondary=NA_character_)
+
+#    nel = nrow(thetab)
+#    ids = thetab[["go_id"]]
+#    terms = thetab[["term"]]
+#    onts = thetab[["ontology"]]
+#    defs = thetab[["definition"]]
+#    nids = thetab[["go_id"]]
+#    names(ans) = nids
+print(date())
+    for (i in seq_len(nel)) {    # THIS ANS WILL BE USED FOR SYNONYMS, to get Term, Ont, Def
+      cur = spltab[[i]]
+      ans[[i]] = new("GOTerms", GOID=cur$go_id[1],
+           Term=cur$term[1], Ontology=cur$ont[1],
+           Definition=cur$definition[1], Synonym=as.character(na.omit(cur$synoym)),
+             Secondary=as.character(na.omit(cur$secondary)))
+      }
+print(date())
     CURRENT2 = "GOTERM"
     CURRENTE2 = "GOTERM_env"
   # start environment production
@@ -196,17 +214,11 @@ GOTERM <- NULL
 
 ## do SYNONYM env
 
-#    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
-#    tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
-#    thetab = tabref |> as.data.frame()
-  
-#    syns = thetab$synonym
-#    names(syns) = thetab$scope
-#    ids = thetab$go_id
-#    ssyn = split(syns, ids)
-#    nids = names(ssyn)
-
-
+# blocking this code which was essential for emulating the
+# GOSYNONYM environment of GO.db, but is slow
+# Each release it will be run to produce an gosynonym_x_xx.rds for 
+# storage in inst/synonyms
+if (FALSE) {
      allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
      tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
 
@@ -223,6 +235,15 @@ GOTERM <- NULL
          Synonym=(tabref |> filter(go_id==x$go_id[1]))$synonym, Secondary=x$secondary)
      })
      nids = names(obs)
+}
+
+# special serialization step after passing check to see if we
+# can get package load time down from 16 seconds
+
+#    saveRDS(obs, file="~/gosynonym_3_23.rds")
+    obs = readRDS(system.file("synonyms", "gosynonym_3_23.rds", package="GO.db3"))
+    nids = names(obs)
+
 
     CURRENT2 = "GOSYNONYM"
     CURRENTE2 ="GOSYNONYM_env"
