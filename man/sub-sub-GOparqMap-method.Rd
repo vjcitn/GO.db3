@@ -6,6 +6,15 @@
 \usage{
 \S4method{[[}{GOparqMap}(x, i, j, ...)
 }
+\arguments{
+\item{x}{instance of GOparqMap}
+
+\item{i}{character}
+
+\item{j}{character, likely not used}
+
+\item{\dots}{not used}
+}
 \description{
 selector
 }

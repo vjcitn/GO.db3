@@ -11,7 +11,7 @@ Description: This package defines Bioconductor-oriented
 	Gene Ontology interfaces based on parquet+arrow+dplyr, emulating some of 
 	the functionality of the AnnotationDbi-based GO.db.
 Depends: R (>= 4.2.0), AnnotationDbi
-Imports: methods, BiocManager, dplyr, arrow, rlang
+Imports: methods, BiocManager, dplyr, arrow, rlang, stats
 Suggests: knitr, BiocStyle, testthat, rmarkdown
 License: Apache 2.0 + file LICENSE
 VignetteBuilder: knitr

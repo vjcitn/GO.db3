@@ -76,6 +76,7 @@ GOTERM <- NULL
 
 
 #' environment for GO SYNONYM
+#' @importFrom stats na.omit
 #' @name GOSYNONYM
 #' @examples
 #' get("GO:1905121", GOSYNONYM)
@@ -187,7 +188,6 @@ GOTERM <- NULL
 #    defs = thetab[["definition"]]
 #    nids = thetab[["go_id"]]
 #    names(ans) = nids
-print(date())
     for (i in seq_len(nel)) {    # THIS ANS WILL BE USED FOR SYNONYMS, to get Term, Ont, Def
       cur = spltab[[i]]
       ans[[i]] = new("GOTerms", GOID=cur$go_id[1],
@@ -195,7 +195,6 @@ print(date())
            Definition=cur$definition[1], Synonym=as.character(na.omit(cur$synoym)),
              Secondary=as.character(na.omit(cur$secondary)))
       }
-print(date())
     CURRENT2 = "GOTERM"
     CURRENTE2 = "GOTERM_env"
   # start environment production

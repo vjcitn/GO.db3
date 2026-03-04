@@ -27,6 +27,10 @@
 setClass("GOparqMap", contains="GOTermsAnnDbBimap")  # only will address items that work on an environment
 
 #' selector
+#' @param x instance of GOparqMap
+#' @param i character 
+#' @param j character, likely not used
+#' @param \dots not used
 #' @export
 setMethod("[[", "GOparqMap", function(x,i,j,...) get(i, slot(x,"datacache")))
 

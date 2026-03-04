@@ -18,14 +18,25 @@ output:
 # Introduction
 
 This package aims to replace GO.db.  The AnnotationPipeline system in which
-GO.db is constructed has become stale.
+GO.db is constructed has become stale.  Instead of SQLite following a complex
+schema (apparently built to foster cross-curation of different annotation
+resources), we base the package on similarly structured parquet files in which
+the `GO:nnnnnnn` tag can be regarded as primary key.
 
 # Demonstration
 
+An object called `GO.db` is an instance of a new S4 class `GOparq`.
+
+A select method is available.
 ```{r lk,message=FALSE}
 library(GO.db3)
 GO.db
 select(GO.db, keys=c("GO:0009435", "GO:0009436"), keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
 ```
 
-The mapIds method needs to be implemented.
+The legacy environments are available.
+
+```{r lkenv}
+GOTERM
+get("GO:0009435", GOTERM)
+```
