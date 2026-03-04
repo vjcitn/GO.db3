@@ -5,7 +5,7 @@
 \alias{GOSYNONYM}
 \title{environment for GO SYNONYM}
 \format{
-An object of class \code{environment} of length 26114.
+An object of class \code{environment} of length 3312.
 }
 \usage{
 GOSYNONYM
@@ -13,13 +13,7 @@ GOSYNONYM
 \description{
 environment for GO SYNONYM
 }
-\note{
-The behavior is unlike that of GO.db::GOSYNONYM which gives
-stanzas from OBO.  Synonymous phrases are returned along with ids
-of secondary GO terms.
-}
 \examples{
-get("GO:0000215", GO.db3::GOSYNONYM)
-# see  https://www.ebi.ac.uk/QuickGO/term/GO:0000215 for related information
+get("GO:1905121", GOSYNONYM)
 }
 \keyword{datasets}

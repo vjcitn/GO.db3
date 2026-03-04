@@ -77,12 +77,8 @@ GOTERM <- NULL
 
 #' environment for GO SYNONYM
 #' @name GOSYNONYM
-#' @note The behavior is unlike that of GO.db::GOSYNONYM which gives
-#' stanzas from OBO.  Synonymous phrases are returned along with ids
-#' of secondary GO terms.
 #' @examples
-#' get("GO:0000215", GO.db3::GOSYNONYM)
-#' # see  https://www.ebi.ac.uk/QuickGO/term/GO:0000215 for related information
+#' get("GO:1905121", GOSYNONYM)
 #' @export
 GOSYNONYM <- NULL
 
@@ -125,7 +121,8 @@ GOTERM <- NULL
      fl[[type]] = local({
         currente <- CURRENTE 
         function() {
-        get(currente, envir=ns)
+        ans = get(currente, envir=ns)
+        ans
         }})
      rm(list=CURRENT, envir=ns)
      makeActiveBinding(CURRENT, fl[[type]], ns)
@@ -156,37 +153,90 @@ GOTERM <- NULL
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        get(currente2, envir=ns)
+        ans = get(currente2, envir=ns)
+        ans
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
     }
 ## end PARENTS environments
 
+# DO TERM env
+    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+    tabref= arrow::open_dataset(grep("term", allcon$files, value=TRUE))
+    thetab = tabref |> as.data.frame()
+    nel = nrow(thetab)
+    ans = vector("list", nel)
+    ids = thetab[["go_id"]]
+    terms = thetab[["term"]]
+    onts = thetab[["ontology"]]
+    defs = thetab[["definition"]]
+    nids = thetab[["go_id"]]
+    names(ans) = nids
+    for (i in seq_len(nel))    # THIS ANS WILL BE USED FOR SYNONYMS
+      ans[[i]] = new("GOTerms", GOID=ids[i],
+           Term=terms[i], Ontology=onts[i],
+           Definition=defs[i], Synonym=NA_character_,
+             Secondary=NA_character_)
+    CURRENT2 = "GOTERM"
+    CURRENTE2 = "GOTERM_env"
+  # start environment production
+     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
+     nn = lapply(seq_len(length(ans)),
+        function(i) assign(nids[i], ans[[i]], envir=get(CURRENTE2, envir=ns)))
+  # Now create the active binding
+     fl2[[type]] = local({
+        currente2 <- CURRENTE2
+        function() {
+        ans = get(currente2, envir=ns)
+        ans
+        }})
+     rm(list=CURRENT2, envir=ns)
+     makeActiveBinding(CURRENT2, fl2[[type]], ns)
+
 ## do SYNONYM env
 
-    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
-    tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
-    thetab = tabref |> as.data.frame()
+#    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+#    tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
+#    thetab = tabref |> as.data.frame()
   
-    syns = thetab$synonym
-    names(syns) = thetab$scope
-    ids = thetab$go_id
-    ssyn = split(syns, ids)
-    nids = names(ssyn)
+#    syns = thetab$synonym
+#    names(syns) = thetab$scope
+#    ids = thetab$go_id
+#    ssyn = split(syns, ids)
+#    nids = names(ssyn)
+
+
+     allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
+     tabref= arrow::open_dataset(grep("go_synonym", allcon$files, value=TRUE))
+
+     tr = tabref |> dplyr::collect()
+     tabref = as.data.frame(tr)
+
+     hassec = tabref[which(!is.na(tabref$secondary)),]
+
+     tt = split(hassec, hassec$secondary)
+     obs = lapply(tt, function(x) {
+       curt = ans[[x$go_id]] #get(x$go_id[1], GOTERM, envir=ns)
+       new("GOTerms", GOID=x$go_id[1], Term=slot(curt, "Term"),
+         Ontology=slot(curt, "Ontology"), Definition=slot(curt, "Definition"),
+         Synonym=(tabref |> filter(go_id==x$go_id[1]))$synonym, Secondary=x$secondary)
+     })
+     nids = names(obs)
 
     CURRENT2 = "GOSYNONYM"
     CURRENTE2 ="GOSYNONYM_env"
   # start environment production
     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
 
-    for (i in seq_len(length(nids))) assign(nids[i], ssyn[[i]], envir=get(CURRENTE2, envir=ns))
+    for (i in seq_len(length(nids))) assign(nids[i], obs[[i]], envir=get(CURRENTE2, envir=ns))
 
   # Now create the active binding
      fl2 = local({
         currente2 <- CURRENTE2
         function() {
-        get(currente2, envir=ns)
+        ans = get(currente2, envir=ns)
+        ans
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2, ns)
@@ -216,6 +266,8 @@ GOTERM <- NULL
         currente2 <- CURRENTE2
         function() {
         get(currente2, envir=ns)
+        ans = get(currente2, envir=ns)
+        ans
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
@@ -243,7 +295,8 @@ GOTERM <- NULL
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        get(currente2, envir=ns)
+        ans = get(currente2, envir=ns)
+        ans
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
@@ -251,37 +304,6 @@ GOTERM <- NULL
 
 # END OFFSPRING
 
-# DO TERM env
-    allcon = arrow::open_dataset(system.file("extdata", "go323", package="GO.db3"))
-    tabref= arrow::open_dataset(grep("term", allcon$files, value=TRUE))
-    thetab = tabref |> as.data.frame()
-    nel = nrow(thetab)
-    ans = vector("list", nel)
-    ids = thetab[["go_id"]]
-    terms = thetab[["term"]]
-    onts = thetab[["ontology"]]
-    defs = thetab[["definition"]]
-    nids = thetab[["go_id"]]
-    names(ans) = nids
-    for (i in seq_len(nel)) 
-      ans[[i]] = new("GOTerms", GOID=ids[i],
-           Term=terms[i], Ontology=onts[i],
-           Definition=defs[i], Synonym=NA_character_,
-             Secondary=NA_character_)
-    CURRENT2 = "GOTERM"
-    CURRENTE2 = "GOTERM_env"
-  # start environment production
-     assign(CURRENTE2, new.env(hash=TRUE), envir=ns)
-     nn = lapply(seq_len(length(ans)),
-        function(i) assign(nids[i], ans[[i]], envir=get(CURRENTE2, envir=ns)))
-  # Now create the active binding
-     fl2[[type]] = local({
-        currente2 <- CURRENTE2
-        function() {
-        get(currente2, envir=ns)
-        }})
-     rm(list=CURRENT2, envir=ns)
-     makeActiveBinding(CURRENT2, fl2[[type]], ns)
 
 #> head(ter)
 ## A tibble: 6 × 4
