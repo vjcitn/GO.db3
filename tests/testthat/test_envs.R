@@ -1,7 +1,10 @@
   
 test_that("check a synonym", {
-   chk = get("GO:2001182", GOSYNONYM)
+   chk = get("GO:2001182", slot(GOSYNONYM, "datacache"))  # chk slot
    id = slot(chk, "GOID")
+   expect_equal(id, "GO:0032655")
+   chk2 = GOSYNONYM[["GO:2001182"]]  # chk [[ method
+   id = slot(chk2, "GOID")
    expect_equal(id, "GO:0032655")
    ont = slot(chk, "Ontology")
    expect_equal(ont, "BP")
@@ -12,6 +15,6 @@ test_that("check a synonym", {
 })
 
 test_that("check a parent", {
-   chk = get("GO:0032655", GOBPPARENTS)
+   chk = get("GO:0032655", slot(GOBPPARENTS, "datacache")) # right to env
    expect_true(all(c("GO:0001817", "GO:0032615") %in% as.character(chk)))
 })
