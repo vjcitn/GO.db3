@@ -5,7 +5,7 @@
 \alias{GOSYNONYM}
 \title{environment for GO SYNONYM}
 \format{
-An object of class \code{environment} of length 3312.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOSYNONYM
@@ -14,6 +14,7 @@ GOSYNONYM
 environment for GO SYNONYM
 }
 \examples{
-get("GO:1905121", GOSYNONYM)
+get("GO:1905121", slot(GOSYNONYM, "datacache"))
+GOSYNONYM[["GO:1905121"]]
 }
 \keyword{datasets}

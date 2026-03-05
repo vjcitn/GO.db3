@@ -5,7 +5,7 @@
 \alias{GOCCCHILDREN}
 \title{environment for GO CHILDREN CC}
 \format{
-An object of class \code{environment} of length 1358.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOCCCHILDREN

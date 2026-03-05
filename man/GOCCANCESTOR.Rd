@@ -5,7 +5,7 @@
 \alias{GOCCANCESTOR}
 \title{environment for GO ANCESTOR CC}
 \format{
-An object of class \code{environment} of length 4068.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOCCANCESTOR

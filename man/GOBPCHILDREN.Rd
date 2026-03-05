@@ -5,7 +5,7 @@
 \alias{GOBPCHILDREN}
 \title{environment for GO CHILDREN BP}
 \format{
-An object of class \code{environment} of length 14658.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOBPCHILDREN

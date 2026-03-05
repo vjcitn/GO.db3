@@ -21,10 +21,26 @@
 
 #print.GOparqEnv = function(x, ...) cat("GOparqEnv: use ls, get, mget, [[, ...\n")
 
-#' inheritor
-#' @importClassesFrom AnnotationDbi AnnDbBimap GOTermsAnnDbBimap
+# You can't inherit, you need to be able to run
+# debugging in: dbCountRowsFromL2Rchain(dbconn(x), x@L2Rchain, x@Lkeys, x@Rkeys)
+# debug: {
+#     SQLchunks <- .makeSQLchunks(L2Rchain)
+#     SQLwhat <- "COUNT(*)"
+#     SQL <- .makeSQL(SQLchunks, SQLwhat, Lkeys, Rkeys)
+#     dbQuery(conn, SQL, 1)
+# }
+
+
+#' environment wrapper
 #' @export
-setClass("GOparqMap", contains="GOTermsAnnDbBimap")  # only will address items that work on an environment
+setClass("GOparqMap", slots=c(datacache="environment", keys="character")) #contains="GOTermsAnnDbBimap")  # only will address items that work on an environment
+
+#' keylist
+#' @param x instance of GOparqMap
+#' @param keytype character
+#' @param \dots not used
+#' @export
+setMethod("keys", "GOparqMap", function(x, keytype, ...) ls(slot(x, "datacache")))
 
 #' selector
 #' @param x instance of GOparqMap
@@ -33,6 +49,13 @@ setClass("GOparqMap", contains="GOTermsAnnDbBimap")  # only will address items t
 #' @param \dots not used
 #' @export
 setMethod("[[", "GOparqMap", function(x,i,j,...) get(i, slot(x,"datacache")))
+
+#' printer
+#' @param object instance of GOparqMap
+#' @export
+setMethod("show", "GOparqMap", function(object) {
+ cat(sprintf("GO.db3 GOparqMap with %d keys.\n", length(ls(slot(object, "datacache")))))
+})
 
 
 #tt = new("GOparqMap", datacache=GOTERM, Lkeys=ls(GOTERM))

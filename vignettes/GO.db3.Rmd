@@ -34,9 +34,10 @@ GO.db
 select(GO.db, keys=c("GO:0009435", "GO:0009436"), keytype="GOID", columns=c("GOID", "TERM", "ONTOLOGY"))
 ```
 
-The legacy environments are available.
+The legacy environments are available, but with a simpler class wrapper.
 
 ```{r lkenv}
 GOTERM
-get("GO:0009435", GOTERM)
+get("GO:0009435", slot(GOTERM, "datacache"))
+GOTERM[["GO:0009435"]]
 ```

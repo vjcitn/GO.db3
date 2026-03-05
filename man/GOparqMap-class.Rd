@@ -3,7 +3,7 @@
 \docType{class}
 \name{GOparqMap-class}
 \alias{GOparqMap-class}
-\title{inheritor}
+\title{environment wrapper}
 \description{
-inheritor
+environment wrapper
 }

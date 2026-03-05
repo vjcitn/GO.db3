@@ -5,7 +5,7 @@
 \alias{GOMFANCESTOR}
 \title{environment for GO ANCESTOR MF}
 \format{
-An object of class \code{environment} of length 10122.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOMFANCESTOR

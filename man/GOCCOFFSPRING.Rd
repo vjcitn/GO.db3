@@ -5,7 +5,7 @@
 \alias{GOCCOFFSPRING}
 \title{environment for GO OFFSPRING CC}
 \format{
-An object of class \code{environment} of length 1358.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOCCOFFSPRING

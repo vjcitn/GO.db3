@@ -79,7 +79,8 @@ GOTERM <- NULL
 #' @importFrom stats na.omit
 #' @name GOSYNONYM
 #' @examples
-#' get("GO:1905121", GOSYNONYM)
+#' get("GO:1905121", slot(GOSYNONYM, "datacache"))
+#' GOSYNONYM[["GO:1905121"]]
 #' @export
 GOSYNONYM <- NULL
 
@@ -122,8 +123,9 @@ GOTERM <- NULL
      fl[[type]] = local({
         currente <- CURRENTE 
         function() {
-        ans = get(currente, envir=ns)
-        ans
+        env = get(currente, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT, envir=ns)
      makeActiveBinding(CURRENT, fl[[type]], ns)
@@ -154,8 +156,9 @@ GOTERM <- NULL
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        ans = get(currente2, envir=ns)
-        ans
+        env = get(currente2, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
@@ -205,8 +208,9 @@ GOTERM <- NULL
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        ans = get(currente2, envir=ns)
-        ans
+        env = get(currente2, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
@@ -255,8 +259,9 @@ if (FALSE) {
      fl2 = local({
         currente2 <- CURRENTE2
         function() {
-        ans = get(currente2, envir=ns)
-        ans
+        env = get(currente2, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2, ns)
@@ -285,9 +290,11 @@ if (FALSE) {
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        get(currente2, envir=ns)
-        ans = get(currente2, envir=ns)
-        ans
+        #get(currente2, envir=ns)
+        #ans = get(currente2, envir=ns)
+        env = get(currente2, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)
@@ -315,8 +322,9 @@ if (FALSE) {
      fl2[[type]] = local({
         currente2 <- CURRENTE2
         function() {
-        ans = get(currente2, envir=ns)
-        ans
+        env = get(currente2, envir=ns)
+        tt = new("GOparqMap", datacache=env, keys=ls(env))
+        tt
         }})
      rm(list=CURRENT2, envir=ns)
      makeActiveBinding(CURRENT2, fl2[[type]], ns)

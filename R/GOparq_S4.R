@@ -22,13 +22,13 @@ setMethod("show", "GOparq", function(object) {
 }
 
 #' emulate AnnotationDbi
-#' @importFrom AnnotationDbi select keys columns
+#' @importFrom AnnotationDbi select keys columns keytypes mapIds
 #' @rawNamespace import(dplyr, except=select)
 #' @import arrow
 #' @param x instance of GOparq
 #' @param keys for filtering, if NULL, no filtering performed
 #' @param columns for joining and selecting
-#' @param keytype for table selection: one of "term", "goid"; all caps may be used
+#' @param keytype for table selection: one of "term", "goid", "ontology"; all caps may be used
 #' @param \dots not used
 #' @return data.frame
 #' @examples
@@ -51,7 +51,7 @@ setMethod("select", "GOparq", function(x, keys, columns, keytype, ...) {
     chkc = setdiff(columns, possible_columns)
     if (length(chkc)>0) stop(sprintf("%s is not a permissible value in columns.", chkc))
     if (!("GOID" %in% columns)) columns = c("GOID", columns)  # GO.db generally returned GOID
-    stopifnot(keytype %in% c("term", "goid"))
+    stopifnot(keytype %in% c("term", "goid", "ontology"))
     stopifnot(length(keytype) == 1)
     allcon = x@conn$allcon
     termref = x@conn$termref
@@ -61,6 +61,9 @@ setMethod("select", "GOparq", function(x, keys, columns, keytype, ...) {
     } else if (keytype == "goid") {
         if (!is.null(keys)) 
             thetab = dplyr::filter(termref, go_id %in% keys)
+    } else if (keytype == "ontology") {
+        if (!is.null(keys)) 
+            thetab = dplyr::filter(termref, ontology %in% keys)
     }
     if (!is.null(columns)) {
         if ("GOID" %in% columns) 
@@ -80,21 +83,22 @@ setMethod("select", "GOparq", function(x, keys, columns, keytype, ...) {
 
 
 
-#' list keys
-#' @importFrom rlang sym
-#' @param x instance of GOparq
-#' @param keytype character(1) one of "GOID", "TERM", "DEFINITION", "ONTOLOGY"
-#' @param \dots not used
-#' @examples
-#' head(keys(GO.db))
-#' @export
-setMethod("keys", "GOparq", function(x, keytype, ...) {
-    if (missing(keytype)) {
-     message("missing keytype is allowed for backwards compatibility; it will become a warning in bioc > 3.23")
-     keytype = "goid"
-     }
-     keytype = tolower(keytype)
-     kmap = c(goid="go_id", definition="definition", term="term", ontology="ontology") # cater for GOID in legacy
-     stopifnot(keytype %in% names(kmap))
-     return(slot(GO.db, "conn")$termref |> dplyr::select(rlang::sym(kmap[keytype])) |> dplyr::collect() |> unlist() |> unname())
-})
+# #' list keys
+# #' @importFrom rlang sym
+# #' @param x instance of GOparq
+# #' @param keytype character(1) one of "GOID", "TERM", "DEFINITION", "ONTOLOGY"
+# #' @param \dots not used
+# #' @examples
+# #' head(keys(GO.db))
+# #' @export
+# setMethod("keys", "GOparq", function(x, keytype, ...) {
+#     if (missing(keytype)) {
+#      message("missing keytype is allowed for backwards compatibility; it will become a warning in bioc > 3.23")
+#      keytype = "goid"
+#      }
+#      keytype = tolower(keytype)
+#      kmap = c(goid="go_id", definition="definition", term="term", ontology="ontology") # cater for GOID in legacy
+#      stopifnot(keytype %in% names(kmap))
+#      if (keytype=="ontology") return(slot(GO.db, "conn")$termref |> dplyr::select(ontology) |> dplyr::collect() |> unlist() |> unique())
+#      return(slot(GO.db, "conn")$termref |> dplyr::select(rlang::sym(kmap[keytype])) |> dplyr::collect() |> unlist() |> unname())
+# })

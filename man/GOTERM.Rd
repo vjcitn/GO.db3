@@ -5,9 +5,9 @@
 \alias{GOTERM}
 \title{environment for GO TERM}
 \format{
-An object of class \code{environment} of length 39354.
+An object of class \code{GOparqMap} of length 1.
 
-An object of class \code{environment} of length 39354.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOTERM

@@ -5,7 +5,7 @@
 \alias{GOBPPARENTS}
 \title{environment for GO PARENTS BP}
 \format{
-An object of class \code{environment} of length 25152.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOBPPARENTS

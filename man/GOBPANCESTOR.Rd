@@ -5,7 +5,7 @@
 \alias{GOBPANCESTOR}
 \title{environment for GO ANCESTOR BP}
 \format{
-An object of class \code{environment} of length 24546.
+An object of class \code{GOparqMap} of length 1.
 }
 \usage{
 GOBPANCESTOR

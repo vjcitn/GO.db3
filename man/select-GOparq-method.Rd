@@ -13,7 +13,7 @@
 
 \item{columns}{for joining and selecting}
 
-\item{keytype}{for table selection: one of "term", "goid"; all caps may be used}
+\item{keytype}{for table selection: one of "term", "goid", "ontology"; all caps may be used}
 
 \item{\dots}{not used}
 }
